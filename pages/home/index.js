@@ -10,8 +10,9 @@
 
 import React, { PropTypes } from 'react';
 import Layout from '../../components/Layout';
-import s from './styles.css';
-import { title, html } from './index.md';
+import { Col,Row } from 'antd';
+import style from './styles.css';
+
 
 class HomePage extends React.Component {
 
@@ -20,23 +21,16 @@ class HomePage extends React.Component {
   };
 
   componentDidMount() {
-    document.title = title;
+
   }
 
   render() {
     return (
-      <Layout className={s.content}>
-        <div dangerouslySetInnerHTML={{ __html: html }} />
-        <h4>Articles</h4>
-        <ul>
-          {this.props.articles.map((article, i) =>
-            <li key={i}><a href={article.url}>{article.title}</a> by {article.author}</li>
-          )}
-        </ul>
-        <p>
-          <br /><br />
-        </p>
-      </Layout>
+          <Row type="flex" justify="center">
+            <Col span={24} className={style.bigTitle} style={{textAlign:"center"}}>
+              基于antd进行响应式开发1
+            </Col>
+          </Row>
     );
   }
 

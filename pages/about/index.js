@@ -22,7 +22,7 @@ class AboutPage extends React.Component {
   render() {
     return (
       <Layout className={s.content}>
-        <h1>{title}</h1>
+        <h1>{title}</h1>111
         <div dangerouslySetInnerHTML={{ __html: html }} />
       </Layout>
     );

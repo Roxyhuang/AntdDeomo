@@ -191,6 +191,11 @@ const config = {
       // Add vendor prefixes to CSS rules using values from caniuse.com
       // https://github.com/postcss/autoprefixer
       require('autoprefixer')(),
+      require('postcss-pxtorem')({
+        rootValue: 100,
+        propWhiteList: [],
+        selectorBlackList: [/^\.ant-/],
+      }),
     ];
   },
 
