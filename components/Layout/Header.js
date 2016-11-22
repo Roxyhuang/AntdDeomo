@@ -1,4 +1,4 @@
-/**
+  /**
  * React Static Boilerplate
  * https://github.com/kriasoft/react-static-boilerplate
  *
@@ -10,8 +10,9 @@
 
 import React from 'react';
 import Navigation from './Navigation';
+import { Col,Row } from 'antd';
 import Link from '../Link';
-import s from './Header.css';
+import style from './Header.css';
 
 class Header extends React.Component {
 
@@ -25,15 +26,13 @@ class Header extends React.Component {
 
   render() {
     return (
-      <header className={`mdl-layout__header ${s.header}`} ref={node => (this.root = node)}>
-        <div className={`mdl-layout__header-row ${s.row}`}>
-          <Link className={`mdl-layout-title ${s.title}`} to="/">
-            React Static Boilerplate
-          </Link>
-          <div className="mdl-layout-spacer"></div>
-          <Navigation />
-        </div>
-      </header>
+      <header>
+        <Row type="flex" justify="center">
+          <Col span={24} className={style.bigTitle}>
+            基于antd进行响应式开发
+          </Col>
+        </Row>
+     </header>
     );
   }
 

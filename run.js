@@ -1,13 +1,3 @@
-/**
- * React Static Boilerplate
- * https://github.com/kriasoft/react-static-boilerplate
- *
- * Copyright © 2015-present Kriasoft, LLC. All rights reserved.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE.txt file in the root directory of this source tree.
- */
-
 /* eslint-disable no-console, global-require */
 
 const fs = require('fs');
@@ -17,9 +7,9 @@ const webpack = require('webpack');
 
 // TODO: Update configuration settings
 const config = {
-  title: 'React Static Boilerplate',        // Your website title
+  title: 'hmb oa',                          // Your website title
   url: 'https://rsb.kriasoft.com',          // Your website URL
-  project: 'react-static-boilerplate',      // Firebase project. See README.md -> How to Deploy
+  project: 'hmb-oa',                        // Firebase project. See README.md -> How to Deploy
   trackingID: 'UA-XXXXX-Y',                 // Google Analytics Site's ID
 };
 
@@ -46,22 +36,26 @@ tasks.set('html', () => {
   const assets = JSON.parse(fs.readFileSync('./public/dist/assets.json', 'utf8'));
   const template = fs.readFileSync('./public/index.ejs', 'utf8');
   const render = ejs.compile(template, { filename: './public/index.ejs' });
-  const output = render({ debug: webpackConfig.debug, bundle: assets.main.js, config });
+  const output = render({
+    debug: webpackConfig.debug,
+    bundle: assets.main.js,
+    bundleCss: assets.main.css,
+    config });
   fs.writeFileSync('./public/index.html', output, 'utf8');
 });
 
 //
 // Generate sitemap.xml
 // -----------------------------------------------------------------------------
-tasks.set('sitemap', () => {
-  const urls = require('./routes.json')
-    .filter(x => !x.path.includes(':'))
-    .map(x => ({ loc: x.path }));
-  const template = fs.readFileSync('./public/sitemap.ejs', 'utf8');
-  const render = ejs.compile(template, { filename: './public/sitemap.ejs' });
-  const output = render({ config, urls });
-  fs.writeFileSync('public/sitemap.xml', output, 'utf8');
-});
+// tasks.set('sitemap', () => {
+//   const urls = require('./routes.json')
+//     .filter(x => !x.path.includes(':'))
+//     .map(x => ({ loc: x.path }));
+//   const template = fs.readFileSync('./public/sitemap.ejs', 'utf8');
+//   const render = ejs.compile(template, { filename: './public/sitemap.ejs' });
+//   const output = render({ config, urls });
+//   fs.writeFileSync('public/sitemap.xml', output, 'utf8');
+// });
 
 //
 // Bundle JavaScript, CSS and image files with Webpack
@@ -88,8 +82,8 @@ tasks.set('build', () => {
   return Promise.resolve()
     .then(() => run('clean'))
     .then(() => run('bundle'))
-    .then(() => run('html'))
-    .then(() => run('sitemap'));
+    .then(() => run('html'));
+  // .then(() => run('sitemap'))
 });
 
 //
@@ -103,7 +97,9 @@ tasks.set('publish', () => {
       project: config.project,
       cwd: __dirname,
     }))
-    .then(() => { setTimeout(() => process.exit()); });
+    .then(() => {
+      setTimeout(() => process.exit());
+    });
 });
 
 //
@@ -125,9 +121,17 @@ tasks.set('start', () => {
     compiler.plugin('done', stats => {
       // Generate index.html page
       const bundle = stats.compilation.chunks.find(x => x.name === 'main').files[0];
+      const bundleCss = stats.compilation.chunks.find(x => x.name === 'main').files.filter((item) =>
+        item.indexOf('styles') > -1
+      )[0];
       const template = fs.readFileSync('./public/index.ejs', 'utf8');
       const render = ejs.compile(template, { filename: './public/index.ejs' });
-      const output = render({ debug: true, bundle: `/dist/${bundle}`, config });
+      const output = render({
+        debug: true,
+        bundle: `/dist/${bundle}`,
+        bundleCss: `/dist/${bundleCss}`,
+        config,
+      });
       fs.writeFileSync('./public/index.html', output, 'utf8');
 
       // Launch Browsersync after the initial bundling is complete

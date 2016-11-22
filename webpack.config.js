@@ -13,15 +13,28 @@
 const path = require('path');
 const webpack = require('webpack');
 const AssetsPlugin = require('assets-webpack-plugin');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const pkg = require('./package.json');
 
 const isDebug = global.DEBUG === false ? false : !process.argv.includes('--release');
 const isVerbose = process.argv.includes('--verbose') || process.argv.includes('-v');
 const useHMR = !!global.HMR; // Hot Module Replacement (HMR)
 const babelConfig = Object.assign({}, pkg.babel, {
-  babelrc: false,
+  babelrc: true,
   cacheDirectory: useHMR,
 });
+
+let theme = {};
+if (pkg.theme && typeof(pkg.theme) === 'string') {
+  let cfgPath = pkg.theme;
+  if (cfgPath.charAt(0) === '.') {
+    cfgPath = path.resolve(cfgPath);
+  }
+  const getThemeConfig = require(cfgPath);
+  theme = getThemeConfig();
+} else if (pkg.theme && typeof(pkg.theme) === 'object') {
+  theme = pkg.theme;
+}
 
 // Webpack configuration (main.js => public/dist/main.{hash}.js)
 // http://webpack.github.io/docs/configuration.html
@@ -75,6 +88,7 @@ const config = {
       'process.env.NODE_ENV': isDebug ? '"development"' : '"production"',
       __DEV__: isDebug,
     }),
+    new ExtractTextPlugin(isDebug ? 'styles.css?[hash]' : 'styles.[hash].css', { allChunks: true }),
     // Emit a JSON file with assets paths
     // https://github.com/sporto/assets-webpack-plugin#options
     new AssetsPlugin({
@@ -97,6 +111,23 @@ const config = {
           path.resolve(__dirname, './main.js'),
         ],
         loader: `babel-loader?${JSON.stringify(babelConfig)}`,
+      },
+
+      {
+        test: /\.less$/,
+        loader: ExtractTextPlugin.extract(
+          // activate source maps via loader query
+          `css-loader?${JSON.stringify({
+            sourceMap: isDebug,
+            // CSS Modules https://github.com/css-modules/css-modules
+            modules: true,
+            localIdentName: isDebug ? '[name]_[local]_[hash:base64:3]' : '[hash:base64:4]',
+            // CSS Nano http://cssnano.co/options/
+            minimize: !isDebug,
+          })}!` +
+          'postcss-loader!' +
+          `less?{"sourceMap":true,"modifyVars":${JSON.stringify(theme)}}!`
+        ),
       },
       {
         test: /\.css/,
@@ -192,7 +223,7 @@ const config = {
       // https://github.com/postcss/autoprefixer
       require('autoprefixer')(),
       require('postcss-pxtorem')({
-        rootValue: 100,
+        rootValue: 10,
         propWhiteList: [],
         selectorBlackList: [/^\.ant-/],
       }),
