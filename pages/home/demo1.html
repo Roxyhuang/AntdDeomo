@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+  <meta charset="UTF-8">
+  <title>rem phone test</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <style>
+    html {
+      height: 100%;
+      width: 100%;
+      font-family: 'Heiti SC', 'Microsoft YaHei';
+      font-size: 20px;
+      /*overflow: hidden;*/
+      outline: 0;
+      -webkit-text-size-adjust:none;
+    }
+    body {
+      height: 100%;
+      margin: 0;
+      /*overflow: hidden;*/
+      -webkit-user-select: none;
+      position: relative;
+    }
+    header,
+    footer {
+      width: 100%;
+      line-height: 1.5rem;
+      font-size: 1rem;
+      color: #000;
+      border: 1px solid #ccc;
+      text-align: center;
+      background-color: #ccc;
+    }
+    .bd {
+      margin-top: 1rem;
+      margin-bottom: .5rem;
+      margin-right: -.5rem;
+      font-size: 0;
+      /*height: 20rem;*/
+    }
+    .box {
+      width: 5rem;
+      height: 5rem;
+      display: inline-block;
+      margin-right:.5rem;
+      margin-bottom: .5rem;
+    }
+    .blue-box {
+      background-color: #06c;
+    }
+    .org-box {
+      background-color: #1fc195;
+    }
+  </style>
+
+</head>
+
+<body>
+
+<header>固定高度viewport方案</header>
+
+
+<div class="bd">
+  <div class="box blue-box"></div>
+  <div class="box org-box"></div>
+  <div class="box blue-box"></div>
+  <div class="box org-box"></div>
+  <div class="box blue-box"></div>
+  <div class="box org-box"></div>
+</div>
+
+
+<footer>我是页脚</footer>
+
+</body>
+<!--<script>-->
+  <!--(function () {-->
+    <!--var scheiht = window.screen.height;-->
+    <!--document.querySelectorAll(".bd")[0].style.height = scheiht +"px";-->
+  <!--})()-->
+
+<!--</script>-->
+</html>
