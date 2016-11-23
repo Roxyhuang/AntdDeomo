@@ -7,7 +7,7 @@ title: 基于antd响应式布局
 
 之前做过PC页面的人聊的最多的就是『兼容』，这是因为浏览器之间的差异引起的，不再多说。而移动端是基本没有『兼容』的问题的，全是CSS3，简直不要太开心。可是『适配』问题随之而来。，我们怎么开始呢？目前有三种方法：  
 
-1. (1).固定高度，宽度自适应
+1. **(1).固定高度，宽度自适应(我们采用)**
 2. (2).固定宽度，viewport 缩放
 3. (3).rem做宽度，viewport缩放
 
@@ -15,7 +15,7 @@ title: 基于antd响应式布局
   
 ## 1 固定高度，宽度自适应 viewport缩放
 
-这是目前最通用的一种做法，属于自适应布局，viewport width 设置为 device-width，以较小宽度（如 320px）的视觉稿作为参照进行布局。垂直方向的高度和间距使用定值，水平方向混合使用定值和百分比或者利用弹性布局，最终达到“当手机屏幕变化时，横向拉伸或者填充空白的效果”。图像元素根据容器情况，使用定值或者 background-size 缩放。
+这是目前最通用的一种做法，属于自适应布局，viewport width 设置为 device-width，垂直方向的高度和间距使用定值，水平方向混合使用定值和百分比或者利用弹性布局，最终达到“当手机屏幕变化时，横向拉伸或者填充空白的效果”。图像元素根据容器情况，使用定值或者 background-size 缩放。
 
 **（1）例子：**[固定高度Demo1](http://www.meow.re/demo/screen-adaptation-in-mobileweb/app-fixed-height.html) [固定高度Demo2](./demo1.html)
 
@@ -174,7 +174,14 @@ d.	适配 js 需尽可能早进入，减少（避免）viewport 变化引起的�
 我们的栅格化系统支持 Flex 布局，允许子元素在父节点内的水平对齐方式 - 居左、居中、居右、等宽排列、分散排列。子元素与子元素之间，支持顶部对齐、垂直居中对齐、底部对齐的方式。同时，支持使用 order 来定义元素的排列顺序。
 Flex 布局是基于 24 栅格来定义每一个『盒子』的宽度，但排版则不拘泥于栅格。
 
-[antdDemo](https://ant.design/components/grid/)
+[antdDemo1简单实现响应式](/about)
+
+
+[antdDemo2antd grid官网入口](https://ant.design/components/grid/)
+
+
+
+[antdDemo3](/about)
 
 ------------------
 
@@ -192,5 +199,9 @@ webpack中我们会用到 css-loader less-loader等加载起来处理css，样�
 ##2.  全局样式
 
 ##3.  覆盖antd样式
+
+
+
+## 7 flexbox 
 
 

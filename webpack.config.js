@@ -88,7 +88,7 @@ const config = {
       'process.env.NODE_ENV': isDebug ? '"development"' : '"production"',
       __DEV__: isDebug,
     }),
-    new ExtractTextPlugin(isDebug ? 'styles.css?[hash]' : 'styles.[hash].css', { allChunks: true }),
+    new ExtractTextPlugin(isDebug ? 'styles.css?[hash]' : 'styles.[hash].css', {allChunks: true}),
     // Emit a JSON file with assets paths
     // https://github.com/sporto/assets-webpack-plugin#options
     new AssetsPlugin({
@@ -112,7 +112,6 @@ const config = {
         ],
         loader: `babel-loader?${JSON.stringify(babelConfig)}`,
       },
-
       {
         test: /\.less$/,
         loader: ExtractTextPlugin.extract(
@@ -128,6 +127,24 @@ const config = {
           'postcss-loader!' +
           `less?{"sourceMap":true,"modifyVars":${JSON.stringify(theme)}}!`
         ),
+        exclude: path.resolve(__dirname, "node_modules"),
+      },
+      {
+        test: /\.less$/,
+        loader: ExtractTextPlugin.extract(
+          // activate source maps via loader query
+          `css-loader?${JSON.stringify({
+            sourceMap: isDebug,
+            // CSS Modules https://github.com/css-modules/css-modules
+            modules: false,
+            localIdentName: isDebug ? '[name]_[local]_[hash:base64:3]' : '[hash:base64:4]',
+            // CSS Nano http://cssnano.co/options/
+            minimize: !isDebug,
+          })}!` +
+          'postcss-loader!' +
+          `less?{"sourceMap":true,"modifyVars":${JSON.stringify(theme)}}!`
+        ),
+        include: path.resolve(__dirname, "node_modules"),
       },
       {
         test: /\.css/,
@@ -182,7 +199,7 @@ const config = {
     return [
       // Transfer @import rule by inlining content, e.g. @import 'normalize.css'
       // https://github.com/postcss/postcss-import
-      require('postcss-import')({ addDependencyTo: bundler }),
+      require('postcss-import')({addDependencyTo: bundler}),
       // W3C variables, e.g. :root { --color: red; } div { background: var(--color); }
       // https://github.com/postcss/postcss-custom-properties
       require('postcss-custom-properties')(),
@@ -235,7 +252,7 @@ const config = {
 // Optimize the bundle in release (production) mode
 if (!isDebug) {
   config.plugins.push(new webpack.optimize.DedupePlugin());
-  config.plugins.push(new webpack.optimize.UglifyJsPlugin({ compress: { warnings: isVerbose } }));
+  config.plugins.push(new webpack.optimize.UglifyJsPlugin({compress: {warnings: isVerbose}}));
   config.plugins.push(new webpack.optimize.AggressiveMergingPlugin());
 }
 
